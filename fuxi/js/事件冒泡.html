@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #a{
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+        #b{
+           width: 100px;
+            height: 100px;
+            background: green;
+        }
+    </style>
+</head>
+<body>
+        <div id="a">
+            <div id="b">
+
+            </div>
+        </div>
+        <button id="btn">click</button>
+        <script>
+
+            var oA = document.getElementById('a');
+            var oB = document.getElementById('b');
+            var oBtn = document.getElementById('btn');
+            var fn1 = function(){
+                alert('hha');
+            };
+            var fn2 = function(){
+                alert('xix');
+            }
+
+            var handlerArr = [];
+            addEvent(oBtn,'click',fn1);
+            addEvent(oBtn,'click',fn2);
+//            removeEvent(oBtn,'click',fn1);
+//            removeEvent(oBtn,'click',fn2);
+//                    标准浏览器下绑定事件和监听事件
+//          oBtn.addEventListener('click',fn,false);
+//          oBtn.removeEventListener('click',fn,false);
+//                    IE浏览器下绑定和监听事件
+//            oBtn.attachEvent('onclick',fn);
+//            oBtn.detachEvent('onclick',fn);
+
+//                addEvent(oBtn,'click',function(){
+//                    alert('hah');
+//                });
+//                addEvent(oBtn,'click',function(){
+//                    alert('xix');
+//                });
+//                  addEvent(oBtn,'click',function(){
+//                      alert(this == window);
+//                  });
+//            oA.onclick = function(){
+//                alert('a');
+//            };
+//            oB.onclick = function(e){
+//                e = e || window.event;
+//                alert('b');
+////                标准浏览器下阻止事件冒泡
+//                e.stopPropagation();
+////                ie下阻止事件冒泡
+//                window.event.cancelBubble = true;
+//            };
+//            oBtn.onclick = function{
+//                alert('ha');
+//            };
+//            oBtn.onclick = function{
+//                alert('xixi');
+//            };
+//            onclick没有兼容性问题，但是如果绑定多次，后绑定的会把前面绑定的覆盖
+//            标准浏览器下添加事件监听
+//            oBtn.addEventListener('click',function(){
+//                    alert('hha');
+//            },false);
+////              ie浏览器下添加事件监听
+//            oBtn.attachEvent('onclick',function(){
+//                alert('hha');
+//            });
+//            标准浏览器下绑定事件方法的第三个参数，就是控制事件触发顺序是否为事件捕获。true,事件捕获；false,事件冒泡。
+//            默认false,即事件冒泡。Jquery的e.stopPropagation会阻止冒泡
+            for(var i=handlerArr.length-1;i>=0;i--){
+                oBtn.attachEvent('onclick',handlerArr[i]);
+            }
+            function addEvent(elem,type,handler){
+                if(elem.addEventListener){
+                    elem.addEventListener(type,handler,false);
+                }else if(elem.attachEvent){
+
+                    /*elem[type+handle] = function(){
+                        handle.call(elem);
+                    };*/
+                    handlerArr.push(function(){
+                       handler.call(elem);
+                    });
+                    /*elem.attachEvent('on'+type,elem.handlerArr[elem.handlerArr.length-1]);*/
+                }else{
+                    elem['on'+type] = handler;
+                }
+            }
+            function removeEvent(elem,type,handler){
+                if(elem.removeEventListener){
+                    elem.removeEventListener(type,handler,false);
+                }else if(elem.detachEvent){
+                        elem.detachEvent('on'+type,elem[type+handler]);
+                }else{
+                    elem['on'+type] = null;
+                }
+            }
+//            attachEvent给元素绑定事件的时候会把this绑定成window
+        </script>
+</body>
+</html>
